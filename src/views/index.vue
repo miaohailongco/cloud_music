@@ -5,7 +5,7 @@
 				<img class="logo-img" src="../assets/logo_img.png" alt="">
 				<div class="search-box">
 					<img class="search-icon" src="../assets/search.png" alt="">
-					<input type="text" placeholder="搜索">
+					<input type="text" placeholder="搜索 ">
 				</div>
 			</div>
 			<div class="top-right">
