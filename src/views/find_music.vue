@@ -8,7 +8,9 @@
 			<li>歌手</li>
 			<li>最新音乐</li>
 		</ul>
-		<swiper></swiper>
+		<div class="find-music-content">
+			<swiper></swiper>
+		</div>
 	</div>
 </template>
 
@@ -57,6 +59,11 @@
 					}
 				}
 			}
+		}
+		
+		.find-music-content {
+			max-width: 1100px;
+			margin: 0 auto;
 		}
 	}
 </style>
