@@ -107,6 +107,9 @@
 			background-color: #222225;
 			display: flex;
 			justify-content: space-between;
+			border-bottom: 2px solid #f00;
+			// border-image: linear-gradient(to right,#660404,#B72525,#660404);
+			border-image: linear-gradient(to right,#660404, #B72525,#660404) 20 20;
 			
 			.top-left {
 				display: flex;
@@ -184,7 +187,7 @@
 		
 		.cloud-content {
 			width: 100%;
-			height: calc(100% - 140px);
+			height: calc(100% - 133px);
 			background-color: #2B2B2B;
 			color: #D0D0D0;
 			display: flex;
@@ -297,7 +300,7 @@
 		
 		.cloud-bottom {
 			width: 100%;
-			height: 80px;
+			height: 73px;
 			background-color: #222225;
 			border-top: 1px solid #3B3B3E;
 		}

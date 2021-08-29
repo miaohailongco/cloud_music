@@ -1,6 +1,6 @@
 <template>
 	<div class="swiper">
-		<div class="swiper-box" @mouseover="stopLoop">
+		<div class="swiper-box" @mouseover="stopLoop" @mouseleave="swiperLoop">
 			<div>
 				<img class="swiper-img" 
 				v-for="(item,index) in imgList" 
@@ -9,8 +9,10 @@
 				:src="imgList[index]" 
 				>
 			</div>
-			<img class="touch-pre" src="../assets/left.png" alt="" @click="pre">
-			<img class="touch-next" src="../assets/right.png" alt="" @click="next">
+			<div v-if="showTouch">
+				<img class="touch-pre" src="../assets/left.png" alt="" @click="pre">
+				<img class="touch-next" src="../assets/right.png" alt="" @click="next">
+			</div>
 		</div>
 		<div class="indicators">
 			<div 
@@ -36,7 +38,7 @@
 				],
 				currentIndex: 0,
 				timer: null,
-				isStop: false
+				showTouch: false
 			}
 		},
 		mounted() {
@@ -82,17 +84,16 @@
 				if (this.timer) {
 					clearInterval(this.timer)
 				}
-				if (this.isStop) {
-					console.log(this.isStop)
-					clearInterval(this.timer)
-					return
+				if (this.showTouch) {
+					this.showTouch = false
 				}
 				this.timer = setInterval(() => {
 					this.next()
-				},1000)
+				},4000)
 			},
 			stopLoop () {
-				this.isStop = true
+				clearInterval(this.timer)
+				this.showTouch = true
 			}
 		}
 	}
@@ -119,10 +120,10 @@
 			justify-content: center;
 			
 			.indicator {
-				width: 10px;
-				height: 10px;
+				width: 6px;
+				height: 6px;
 				background-color: #2E3033;
-				margin: 0 10px;
+				margin: 0 5px;
 				border-radius: 50px;
 				
 				&.active {

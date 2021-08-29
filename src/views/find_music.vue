@@ -11,6 +11,19 @@
 		<div class="find-music-content">
 			<swiper></swiper>
 		</div>
+		<div class="section">
+			<div class="section-title">
+				<span>推荐歌单</span>
+				<img src="../assets/more.png" alt="">
+			</div>
+			<div class="section-content">
+				<div style="width: 18%;height:0;padding-bottom:18%;background-color: aliceblue;"></div>
+				<div style="width: 18%;height:0;padding-bottom:18%;background-color: aliceblue;"></div>
+				<div style="width: 18%;height:0;padding-bottom:18%;background-color: aliceblue;"></div>
+				<div style="width: 18%;height:0;padding-bottom:18%;background-color: aliceblue;"></div>
+				<div style="width: 18%;height:0;padding-bottom:18%;background-color: aliceblue;"></div>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -32,7 +45,7 @@
 		.cate-title {
 			list-style: none;
 			display: flex;
-			margin-bottom: 30px;
+			margin-bottom: 25px;
 			
 			&>li {
 				margin-right: 20px;
@@ -64,6 +77,30 @@
 		.find-music-content {
 			max-width: 1100px;
 			margin: 0 auto;
+		}
+		
+		.section {
+			max-width: 1100px;
+			margin: 0 auto;
+			
+			.section-title {
+				width: 100%;
+				display: flex;
+				align-items: center;
+				font-size: 20px;
+				font-weight: bold;
+				margin-bottom: 15px;
+				
+				&>img {
+					width: 20px;
+					height: 20px;
+				}
+			}
+			
+			.section-content {
+				display: flex;
+				justify-content: space-between;
+			}
 		}
 	}
 </style>
