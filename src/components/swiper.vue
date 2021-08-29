@@ -1,20 +1,24 @@
 <template>
 	<div class="swiper">
-		<div class="swiper-box">
-			<!-- <img class="swiper-img" :src="item" v-for="(item,index) in imgList" :key="index"> -->
+		<div class="swiper-box" @mouseover="stopLoop">
 			<div>
-				<!-- <img class="swiper-img swiper-img-left" :src="imgList[currentIndex % this.imgList.length]">
-				<img class="swiper-img swiper-img-center" :src="imgList[(currentIndex + 1) % this.imgList.length]">
-				<img class="swiper-img swiper-img-right" :src="imgList[(currentIndex + 2) % this.imgList.length]"> -->
 				<img class="swiper-img" 
 				v-for="(item,index) in imgList" 
 				:key="index" 
-				:class="swiperComputed(currentIndex + index)" 
+				:class="swiperComputed(currentIndex,index)" 
 				:src="imgList[index]" 
 				>
 			</div>
 			<img class="touch-pre" src="../assets/left.png" alt="" @click="pre">
 			<img class="touch-next" src="../assets/right.png" alt="" @click="next">
+		</div>
+		<div class="indicators">
+			<div 
+			:class="'indicator' + (currentIndex == index ? ' active' : '')" 
+			v-for="(item,index) in getListLength" 
+			:key="index" 
+			@mouseover="currentIndex = index"
+			></div>
 		</div>
 	</div>
 </template>
@@ -26,42 +30,69 @@
 				imgList: [
 					require("../assets/swiper.png"),
 					require("../assets/swiper1.png"),
-					require("../assets/swiper2.png")
+					require("../assets/swiper2.png"),
+					require("../assets/swiper3.png"),
+					require("../assets/swiper4.png")
 				],
-				currentIndex: 0
+				currentIndex: 0,
+				timer: null,
+				isStop: false
 			}
 		},
 		mounted() {
-			// console.log(this.imgList)
+			this.swiperLoop()
 		},
 		computed: {
 			swiperComputed () {
-				return index => {
-					console.log('index:' + index)
+				return (currentIndex,index) => {
 					var cls = ''
-					if (index % 3 == 0) {
-						cls = ' swiper-img-left'
+					let pre = currentIndex
+					let active = currentIndex + 1
+					let next = currentIndex + 2
+					if (index == currentIndex) {
+						cls = ' swiper-img-pre'
 					}
-					if (index % 3 == 1) {
-						cls = ' swiper-img-center'
+					if (index == (active > this.getListLength - 1 ? active - this.getListLength : active)) {
+						cls = ' swiper-img-active'
 					}
-					if (index % 3 == 2) {
-						cls = ' swiper-img-right'
+					if (index == (next > this.getListLength - 1 ? next - this.getListLength : next)) {
+						cls = ' swiper-img-next'
 					}
-					console.log('cls:' + cls)
 					return cls
 				}
+			},
+			getListLength () {
+				return this.imgList.length
 			}
 		},
 		methods: {
 			pre () {
-				// this.currentIndex--
-				this.currentIndex = (this.currentIndex + 2) % 3
-				console.log('currentIndex:' + this.currentIndex)
+				this.currentIndex--
+				if (this.currentIndex < 0) {
+					this.currentIndex = this.imgList.length - 1
+				}
 			},
 			next () {
-				this.currentIndex = (this.currentIndex + 1) % 3
-				console.log('currentIndex:' + this.currentIndex)
+				this.currentIndex++
+				if (this.currentIndex == this.imgList.length) {
+					this.currentIndex = 0
+				}
+			},
+			swiperLoop () {
+				if (this.timer) {
+					clearInterval(this.timer)
+				}
+				if (this.isStop) {
+					console.log(this.isStop)
+					clearInterval(this.timer)
+					return
+				}
+				this.timer = setInterval(() => {
+					this.next()
+				},1000)
+			},
+			stopLoop () {
+				this.isStop = true
 			}
 		}
 	}
@@ -79,6 +110,25 @@
 			position: relative;
 			display: flex;
 			overflow: hidden;
+			margin-bottom: 15px;
+		}
+		
+		.indicators {
+			width: 100%;
+			display: flex;
+			justify-content: center;
+			
+			.indicator {
+				width: 10px;
+				height: 10px;
+				background-color: #2E3033;
+				margin: 0 10px;
+				border-radius: 50px;
+				
+				&.active {
+					background-color: #EC4141;
+				}
+			}
 		}
 		
 		.touch-pre,
@@ -108,51 +158,47 @@
 		}
 		
 		.swiper-img {
-			width: 540px;
 			position: absolute;
+			height: 160px;
+			left: 50%;
+			top: 50%;
+			transform: translate(-50%,-50%);
+			z-index: 1;
 			
-			&.swiper-img-left {
+			transition: all .3s ease-in-out;
+			
+			&.swiper-img-pre {
 				height: 160px;
 				left: 0;
 				top: 50%;
-				transform: translateY(-50%);
+				transform: translate(0,-50%);
 				z-index: 2;
 				
-				transition: all .3s ease-in-out;
+				transition: all .4s ease-out;
 			}
 			
-			&.swiper-img-center {
+			&.swiper-img-active {
 				height: 200px;
 				left: 50%;
 				top: 50%;
 				transform: translate(-50%,-50%);
 				z-index: 3;
 				
-				transition: all .3s ease-in-out;
+				transition: all .4s ease-out;
 				
 				&:hover {
 					cursor: pointer;
 				}
 			}
 			
-			&.swiper-img-right {
+			&.swiper-img-next {
 				height: 160px;
 				left: 100%;
 				top: 50%;
 				transform: translate(-100%,-50%);
 				z-index: 2;
 				
-				transition: all .3s ease-in-out;
-			}
-			
-			&.swiper-img-wait {
-				height: 160px;
-				left: 50%;
-				top: 50%;
-				transform: translate(-50%,-50%);
-				z-index: 1;
-				
-				transition: all .3s ease-in-out;
+				transition: all .4s ease-out;
 			}
 		}
 	}
