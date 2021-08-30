@@ -3,10 +3,10 @@
 		<div class="swiper-box" @mouseover="stopLoop" @mouseleave="swiperLoop">
 			<div>
 				<img class="swiper-img" 
-				v-for="(item,index) in imgList" 
+				v-for="(item,index) in swiperList" 
 				:key="index" 
 				:class="swiperComputed(currentIndex,index)" 
-				:src="imgList[index]" 
+				:src="swiperList[index].imageUrl" 
 				>
 			</div>
 			<div v-if="showTouch">
@@ -27,15 +27,14 @@
 
 <script>
 	export default {
+		props: {
+			swiperList: {
+				type: Array,
+				default: null
+			}
+		},
 		data () {
 			return {
-				imgList: [
-					require("../assets/swiper.png"),
-					require("../assets/swiper1.png"),
-					require("../assets/swiper2.png"),
-					require("../assets/swiper3.png"),
-					require("../assets/swiper4.png")
-				],
 				currentIndex: 0,
 				timer: null,
 				showTouch: false
@@ -64,19 +63,21 @@
 				}
 			},
 			getListLength () {
-				return this.imgList.length
+				if (this.swiperList) {
+					return this.swiperList.length
+				}
 			}
 		},
 		methods: {
 			pre () {
 				this.currentIndex--
 				if (this.currentIndex < 0) {
-					this.currentIndex = this.imgList.length - 1
+					this.currentIndex = this.swiperList.length - 1
 				}
 			},
 			next () {
 				this.currentIndex++
-				if (this.currentIndex == this.imgList.length) {
+				if (this.currentIndex == this.swiperList.length) {
 					this.currentIndex = 0
 				}
 			},
