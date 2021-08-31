@@ -7,7 +7,7 @@ export default {
 					// 阻止冒泡
 					e.stopPropagation()
 					// 取消默认行为
-					e.preventDefault()
+					// e.preventDefault()
 				}
 			}
 		})

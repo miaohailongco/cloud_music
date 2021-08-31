@@ -9,8 +9,15 @@
 				</div>
 			</div>
 			<div class="top-right">
-				<img class="user-head" src="../assets/header.jpg" alt="">
-				<span class="user-name">无敌大大龙</span>
+				<div class="login-box" @click="tologin">
+					<div class="header-box">
+						<img class="user-head" src="../assets/unlogin.png" alt="" v-if="1">
+						<img class="user-head" src="../assets/header.jpg" alt="" v-else>
+					</div>
+					<span class="user-name" v-if="1">未登录</span>
+					<span class="user-name" v-else>无敌大大龙</span>
+					<img class="login-icon" src="../assets/colspan.png" alt="">
+				</div>
 				<img class="right-icon" src="../assets/skin.png" alt="">
 				<img class="right-icon" src="../assets/set.png" alt="">
 				<img class="right-icon" src="../assets/msg.png" alt="">
@@ -72,22 +79,101 @@
 			</div>
 		</div>
 		<div class="cloud-bottom">
-			
 		</div>
 		<img class="resize-icon" src="../assets/resize.png" alt="">
+		<!-- 登录注册弹框 -->
+		<cld-modal width="350" height="530" v-model="show" :showTitle="showreg" @toLogin="doLogin">
+			<!-- 登录内容 -->
+			<div class="login-modal">
+				<div class="login-form">
+					<img src="../assets/login_pic.png" alt="">
+					<div class="login-phone">
+						<div>
+							<img src="../assets/login_phone.png" >
+							<span>+86</span>
+							<img src="../assets/colspan.png" >
+						</div>
+						<input type="text" placeholder="请输入手机号" />
+					</div>
+					<div class="login-pwd">
+						<div>
+							<img src="../assets/login_pwd.png" >
+						</div>
+						<input type="text" :placeholder="showreg ? '设置登录密码' : '请输入手机号'" />
+						<span v-if="!showreg">重设密码</span>
+					</div>
+					<label class="auto-login" v-if="!showreg">
+						<input type="checkbox" />
+						<span>自动登录</span>
+					</label>
+					<div class="register-tip" v-if="showreg">密码8-20位，至少包含字母/数字/字符2中组合</div>
+					<div class="login-btn">{{ showreg ? '注册' : '登录' }}</div>
+					<div class="to-register" @click="showreg = true" v-if="!showreg">注册</div>
+					<div class="other-login-way" v-if="showreg">
+						<div class="divider-left"></div>
+						<span>其他注册方式</span>
+						<div class="divider-right"></div>
+					</div>
+					<div class="login-way">
+						<div class="way">
+							<div></div>
+							<div v-if="showreg">微信</div>
+						</div>
+						<div class="way">
+							<div></div>
+							<div v-if="showreg">QQ</div>
+						</div>
+						<div class="way">
+							<div></div>
+							<div v-if="showreg">新浪微博</div>
+						</div>
+						<div class="way">
+							<div></div>
+							<div v-if="showreg">网易邮箱</div>
+						</div>
+					</div>
+				</div>
+				<div class="cloud-clause" v-if="!showreg">
+					<label>
+						<input type="checkbox" />
+						<span class="">同意</span>
+					</label>
+					<span class="clause">《服务条款》</span>
+					<span class="clause">《隐私政策》</span>
+					<span class="clause">《儿童隐私政策》</span>
+				</div>
+			</div>
+		</cld-modal>
 	</div>
 </template>
 
 <script>
 	import drag from "../directives/drag.js"
+	import cldModal from "../components/cld_modal.vue"
 	export default {
 		name: 'index',
+		components: {
+			cldModal
+		},
 		directives: {
 			drag
 		},
 		data () {
 			return {
-				li_active: 0
+				li_active: 0,
+				show: false,
+				phone: '',
+				password: '',
+				showreg: false
+			}
+		},
+		methods: {
+			tologin () {
+				this.showreg = false
+				this.show = true
+			},
+			doLogin () {
+				this.showreg = false
 			}
 		}
 	}
@@ -149,23 +235,41 @@
 				display: flex;
 				align-items: center;
 				
-				.user-head {
-					width: 30px;
-					height: 30px;
-					border-radius: 50px;
+				.login-box {
+					display: flex;
+					align-items: center;
+					
+					.login-icon {
+						width: 10px;
+						height: 10px;
+						margin-left: 10px;
+					}
 					
 					&:hover {
 						cursor: pointer;
 					}
-				}
-				
-				.user-name {
-					color: #a5a7a8;
-					font-size: 14px;
-					margin-left: 10px;
 					
-					&:hover {
-						cursor: pointer;
+					.header-box {
+						width: 25px;
+						height: 25px;
+						background-color: rgba(46,46,48);
+						border-radius: 50px;
+						
+						.user-head {
+							width: 100%;
+							height: 100%;
+							border-radius: 50px;
+						}
+					}
+					
+					.user-name {
+						color: #a5a7a8;
+						font-size: 12px;
+						margin-left: 10px;
+						
+						&:hover {
+							cursor: pointer;
+						}
 					}
 				}
 				
@@ -314,6 +418,298 @@
 			
 			&:hover {
 				cursor: se-resize;
+			}
+		}
+		
+		.login-modal {
+			width: 100%;
+			padding-top: 35px;
+			
+			.login-form {
+				padding: 0 45px;
+				
+				&>img {
+					width: 260px;
+					height: 85px;
+					margin: 0 auto;
+					margin-bottom: 30px;
+				}
+			}
+			
+			.login-phone,
+			.login-pwd {
+				width: 100%;
+				height: 40px;
+				display: flex;
+				border: 1px solid #e5e5e5;
+				
+				&>div {
+					width: 85px;
+					height: 100%;
+					display: flex;
+					justify-content: space-around;
+					align-items: center;
+					font-size: 12px;
+					
+					&>img {
+						width: 20px;
+						height: 20px;
+					}
+					
+					&>img:last-child {
+						width: 12px;
+						height: 12px;
+					}
+				}
+				
+				&>input {
+					outline: none;
+					width: calc(100% - 85px);
+					border: none;
+					border-left: 1px solid #e5e5e5;
+					padding: 0 10px;
+				}
+			}
+			
+			.login-phone {
+				border-top-left-radius: 4px;
+				border-top-right-radius: 4px;
+			}
+			
+			.login-pwd {
+				border-top: none;
+				border-bottom-left-radius: 4px;
+				border-bottom-right-radius: 4px;
+				
+				&>div {
+					width: 30px;
+					
+					&>img {
+						width: 20px !important;
+						height: 20px !important;
+					}
+				}
+				
+				&>input {
+					width: calc(100% - 90px);
+					border-left: none;
+					padding: 5;
+				}
+				
+				&>span {
+					color: #b3b3b3;
+					font-size: 12px;
+					line-height: 40px;
+					
+					&:hover {
+						cursor: pointer;
+					}
+				}
+			}
+			
+			.auto-login {
+				display: flex;
+				align-items: center;
+				margin-top: 10px;
+				
+				&>span {
+					font-size: 12px;
+					color: #666;
+					margin-left: 10px;
+				}
+			}
+			
+			.register-tip {
+				font-size: 12px;
+				color: #9F9F9F;
+				margin-top: 10px;
+			}
+			
+			.login-btn {
+				margin-top: 10px;
+				width: 100%;
+				background-color: #EA4848;
+				color: #fff;
+				border-radius: 8px;
+				text-align: center;
+				padding: 10px 0;
+				letter-spacing: 5px;
+				margin-bottom: 10px;
+				
+				&:hover {
+					background-color: #C72E2E;
+					cursor: pointer;
+				}
+			}
+			
+			.to-register {
+				text-align: center;
+				text-decoration: underline;
+				font-size: 14px;
+				margin-bottom: 20px;
+				
+				&:hover {
+					cursor: pointer;
+				}
+			}
+			
+			.other-login-way {
+				width: 100%;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				font-size: 12px;
+				color: #666;
+				margin: 65px 0 15px 0;
+				
+				.divider-left {
+					flex: 1;
+					height: 0;
+					border-top: 1px solid #666;
+					border-image: linear-gradient(to right, #fff, #DCDCDC) 20 20;
+				}
+				
+				.divider-right {
+					flex: 1;
+					height: 0;
+					border-top: 1px solid #666;
+					border-image: linear-gradient(to left, #fff, #DCDCDC) 20 20;
+				}
+			}
+			
+			.login-way {
+				display: flex;
+				justify-content: space-around;
+				
+				.way {
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					justify-content: center;
+					
+					&>div:first-child {
+						width: 40px;
+						height: 40px;
+						border: 1px solid #CDCDCD;
+						border-radius: 50px;
+						display: flex;
+						justify-content: center;
+						align-items: center;
+						
+						&>img {
+							width: 25px;
+							height: 25px;
+						}
+					}
+					
+					&>div:last-child {
+						color: #999;
+						font-size: 12px;
+						margin-top: 5px;
+					}
+					
+					&:hover {
+						cursor: pointer;
+					}
+				}
+				
+				.way {
+					&:first-child:hover {
+						&>div:first-child {
+							background: url(../assets/wechart_hover.png) no-repeat center;
+							background-size:25px 25px;
+							background-color: #67B633;
+						}
+					}
+					
+					&:first-child>div:first-child {
+						background: url(../assets/wechart.png) no-repeat center;
+						background-size:25px 25px;
+						
+						&>img {
+							width: 25px;
+							height: 25px;
+						}
+					}
+					
+					&:nth-child(2):hover {
+						&>div:first-child {
+							background: url(../assets/qq_hover.png) no-repeat center;
+							background-size:25px 25px;
+							background-color: #34A0DF;
+						}
+					}
+					
+					&:nth-child(2)>div:first-child {
+						background: url(../assets/qq.png) no-repeat center;
+						background-size:25px 25px;
+						
+						&>img {
+							width: 25px;
+							height: 25px;
+						}
+					}
+					
+					&:nth-child(3):hover {
+						&>div:first-child {
+							background: url(../assets/blog_hover.png) no-repeat center;
+							background-size:25px 25px;
+							background-color: #EA4848;
+						}
+					}
+					
+					&:nth-child(3)>div:first-child {
+						background: url(../assets/blog.png) no-repeat center;
+						background-size:25px 25px;
+						
+						&>img {
+							width: 25px;
+							height: 25px;
+						}
+					}
+					&:last-child:hover {
+						&>div:first-child {
+							background: url(../assets/yi_hover.png) no-repeat center;
+							background-size: 40px 40px;
+							background-color: #EA4848;
+						}
+					}
+					
+					&:last-child>div:first-child {
+						background: url(../assets/yi.png) no-repeat center;
+						background-size: 40px 40px;
+					}
+				}
+			}
+			
+			.cloud-clause {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				margin-top: 30px;
+				
+				&>label {
+					display: flex;
+					align-items: center;
+					
+					&>input {
+						margin-right: 5px;
+					} 
+					
+					&>span {
+						color: #9F9F9F;
+						font-size: 12px;
+					}
+				}
+				
+				.clause {
+					font-size: 12px;
+					color: #507DAF;
+					
+					&:hover {
+						cursor: pointer;
+					}
+				}
 			}
 		}
 	}

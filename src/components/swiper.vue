@@ -166,6 +166,7 @@
 			top: 50%;
 			transform: translate(-50%,-50%);
 			z-index: 1;
+			border-radius: 8px;
 			
 			transition: all .3s ease-in-out;
 			
