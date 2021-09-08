@@ -93,13 +93,13 @@
 							<span>+86</span>
 							<img src="../assets/colspan.png" >
 						</div>
-						<input type="text" placeholder="请输入手机号" />
+						<input type="text" placeholder="请输入手机号" v-model="phone" />
 					</div>
 					<div class="login-pwd">
 						<div>
 							<img src="../assets/login_pwd.png" >
 						</div>
-						<input type="text" :placeholder="showreg ? '设置登录密码' : '请输入手机号'" />
+						<input type="text" :placeholder="showreg ? '设置登录密码' : '请输入密码'" v-model="password" />
 						<span v-if="!showreg">重设密码</span>
 					</div>
 					<label class="auto-login" v-if="!showreg">
@@ -107,7 +107,7 @@
 						<span>自动登录</span>
 					</label>
 					<div class="register-tip" v-if="showreg">密码8-20位，至少包含字母/数字/字符2中组合</div>
-					<div class="login-btn">{{ showreg ? '注册' : '登录' }}</div>
+					<div class="login-btn" @click="logReg">{{ showreg ? '注册' : '登录' }}</div>
 					<div class="to-register" @click="showreg = true" v-if="!showreg">注册</div>
 					<div class="other-login-way" v-if="showreg">
 						<div class="divider-left"></div>
@@ -168,6 +168,20 @@
 			}
 		},
 		methods: {
+			// 登录注册
+			logReg () {
+				console.log(this.phone)
+				console.log(this.password)
+				this.$axios({
+					url: '/login/cellphone',
+					data: {
+						phone: this.phone,
+						password: this.password
+					}
+				}).then(res => {
+					console.log(res)
+				})
+			},
 			tologin () {
 				this.showreg = false
 				this.show = true

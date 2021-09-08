@@ -96,8 +96,7 @@
 		methods: {
 			getBanner () {
 				this.$axios({
-					url: '/banner',
-					method:'POST',//其实可以不用写，因为在axios封装文件中设置了默认method为POST
+					url: '/banner'
 				}).then(res => {
 					console.log(res)
 					this.rec_song_list = res.banners
