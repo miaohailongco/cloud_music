@@ -11,11 +11,11 @@
 			<div class="top-right">
 				<div class="login-box" @click="tologin">
 					<div class="header-box">
-						<img class="user-head" src="../assets/unlogin.png" alt="" v-if="1">
-						<img class="user-head" src="../assets/header.jpg" alt="" v-else>
+						<img class="user-head" src="../assets/unlogin.png" alt="" v-if="!userInfo">
+						<img class="user-head" :src="userInfo.avatarUrl" alt="" v-else>
 					</div>
-					<span class="user-name" v-if="1">未登录</span>
-					<span class="user-name" v-else>无敌大大龙</span>
+					<span class="user-name" v-if="!userInfo">未登录</span>
+					<span class="user-name" v-else>{{ userInfo.nickname }}</span>
 					<img class="login-icon" src="../assets/colspan.png" alt="">
 				</div>
 				<img class="right-icon" src="../assets/skin.png" alt="">
@@ -167,20 +167,19 @@
 				showreg: false
 			}
 		},
+		computed: {
+			userInfo () {
+				return this.$store.state.userInfo
+			}
+		},
 		methods: {
 			// 登录注册
 			logReg () {
-				console.log(this.phone)
-				console.log(this.password)
-				this.$axios({
-					url: '/login/cellphone',
-					data: {
-						phone: this.phone,
-						password: this.password
-					}
-				}).then(res => {
-					console.log(res)
-				})
+				let params = {
+					phone: this.phone,
+					password: this.password
+				}
+				this.$store.dispatch('getUserInfo',params)
 			},
 			tologin () {
 				this.showreg = false
